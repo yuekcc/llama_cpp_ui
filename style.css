@@ -1,7 +1,7 @@
 body {
   font-size: 18px;
   line-height: 1.8;
-  background-color: #f0f0eb;
+  /* background-color: #f0f0eb; */
 }
 
 main {
@@ -25,26 +25,50 @@ main {
     }
 
     .tools {
-
     }
   }
 
   .message-container {
-    min-height: calc(100vh - 80px - 40px);
+    min-height: calc(100vh - 80px);
 
     .message {
+      & + & {
+        margin-top: 1rem;
+      }
+
       & .prompt,
       .response,
       .appended {
         .content {
           max-width: 996px;
           margin: 0 auto;
-          padding: 1rem 2rem;
+          padding: 0.5rem 2rem;
         }
       }
 
       .prompt {
-        background-color: #fff;
+        .content {
+          &::before {
+            content: '😀 ';
+            display: block;
+            font-size: 1.5rem;
+          }
+        }
+      }
+
+      .response {
+        .content {
+          &::before {
+            content: '🤖 ';
+            display: block;
+            font-size: 1.5rem;
+          }
+          /* border: 1px solid #ccc; */
+          /* border-radius: 0.25rem; */
+        }
+        /* background-color: #eee; */
+        /* border-top: 1px solid #ccc; */
+        /* border-bottom: 1px solid #ccc; */
       }
 
       .appended {
