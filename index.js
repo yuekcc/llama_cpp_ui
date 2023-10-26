@@ -94,9 +94,21 @@ function onSend() {
   send(prompt_, { systemPrompt: systemPrompt_, writer, config: llmSettings_ });
 }
 
+function exportHistory() {
+  const content = Object.values(state.history)
+    .sort((a, b) => Number(a.id) - Number(b.id))
+    .map(it => [`## ${it.prompt}`.trim(), `${it.response}`.trim()].join('\n\n'))
+    .join('\n\n');
+
+  const blob = new File([content], '对话记录.md', { type: 'text/plain;charset=utf-8' });
+  window.open(URL.createObjectURL(blob));
+}
+
 $('#send').addEventListener('click', onSend);
 $('#prompt').addEventListener('keydown', evt => {
   if (evt.ctrlKey && evt.keyCode === 13) {
     onSend();
   }
 });
+
+$('#export_history').addEventListener('click', exportHistory);
