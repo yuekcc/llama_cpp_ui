@@ -3,140 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>llama.cpp</title>
-
-    <style>
-      /* Box sizing rules */
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-
-      /* Prevent font size inflation */
-      html {
-        -moz-text-size-adjust: none;
-        -webkit-text-size-adjust: none;
-        text-size-adjust: none;
-      }
-
-      /* Remove default margin in favour of better control in authored CSS */
-      body,
-      h1,
-      h2,
-      h3,
-      h4,
-      p,
-      figure,
-      blockquote,
-      dl,
-      dd {
-        margin: 0;
-      }
-
-      /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-      ul[role='list'],
-      ol[role='list'] {
-        list-style: none;
-      }
-
-      /* Set core body defaults */
-      body {
-        min-height: 100vh;
-        line-height: 1.5;
-      }
-
-      /* Set shorter line heights on headings and interactive elements */
-      h1,
-      h2,
-      h3,
-      h4,
-      button,
-      input,
-      label {
-        line-height: 1.1;
-      }
-
-      /* Balance text wrapping on headings */
-      h1,
-      h2,
-      h3,
-      h4 {
-        text-wrap: balance;
-      }
-
-      /* A elements that don't have a class get default styles */
-      a:not([class]) {
-        text-decoration-skip-ink: auto;
-        color: currentColor;
-      }
-
-      /* Make images easier to work with */
-      img,
-      picture {
-        max-width: 100%;
-        display: block;
-      }
-
-      /* Inherit fonts for inputs and buttons */
-      input,
-      button,
-      textarea,
-      select {
-        font: inherit;
-      }
-
-      /* Make sure textareas without a rows attribute are not tiny */
-      textarea:not([rows]) {
-        min-height: 10em;
-      }
-
-      /* Anything that has been anchored to should have extra scroll margin */
-      :target {
-        scroll-margin-block: 5ex;
-      }
-    </style>
+    <title>SSS</title>
+    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <main style="height: 100vh; width: 100vw; position: relative">
-      <!-- <div style="display: flex; gap: 1rem; padding: 1rem 1rem 0 1rem">
-        <div>对话</div>
-        <div>设置</div>
-      </div> -->
-      <article class="message-container">
-        <div class="prompt"></div>
-        <div class="response"></div>
-      </article>
-      <div style="padding: 0.5rem 1rem; position: absolute; bottom: 0; left: 0; right: 0; border-top: 1px solid #ccc">
-        <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem">
-          <textarea rows="2" id="prompt">“为时过早”是什么意思？</textarea>
-          <div><button id="send">Send</button></div>
+    <main>
+      <div class="topbar">
+        <div class="title">SSS</div>
+        <div class="tools">
+          <a href="javascript:">下载</a>
+        </div>
+      </div>
+      <div class="message-container">
+        <div class="message system-tip">
+          <div class="prompt">
+            <div class="content">提示</div>
+          </div>
+          <div class="response">
+            <div class="content">SSS 是基于 LLM 技术，可能会生成不合理结果，请评估后使用。</div>
+          </div>
+          <div class="append"></div>
+        </div>
+        <div class="message system-tip">
+          <div class="prompt">
+            <div class="content">设置</div>
+          </div>
+          <div class="response">
+            <div class="content">
+              <div><textarea rows="1" id="system_prompt" title="系统 Prompt">You are a helpful assistant. 你是一个乐于助人的助手。</textarea></div>
+              <div><textarea rows="1" id="llm_settings" title="LLM 设置，使用 JSON 进行配置">{"n_predict": 800,"temperature": 0.3}</textarea></div>
+            </div>
+          </div>
+          <div class="append"></div>
+        </div>
+      </div>
+
+      <div class="input-box">
+        <div style="padding: 0.5rem 1rem">
+          <div class="inner">
+            <textarea rows="1" id="prompt" placeholder="问题点什么。Ctrl + Enter 发送"></textarea>
+            <div><button id="send">Send</button></div>
+          </div>
         </div>
       </div>
     </main>
 
-    <script type="module">
-      import { send } from '/index.js';
-
-      const $ = document.querySelector.bind(document);
-
-      const systemPrompt = $('#system_prompt');
-      const prompt = $('#prompt');
-
-      $('#send').addEventListener('click', () => {
-        const systemPrompt_ = 'You are a helpful assistant. 你是一个乐于助人的助手。';
-        const prompt_ = prompt.value;
-
-        const messageContainer = document.querySelector('.message-container');
-        const responseContainer = messageContainer.querySelector('.response');
-        const promptContainer = messageContainer.querySelector('.prompt');
-        const writer = text => {
-          responseContainer.textContent += text;
-        };
-
-        promptContainer.textContent = prompt_;
-        send(prompt_, { systemPrompt: systemPrompt_, writer });
-      });
-    </script>
+    <script type="module" src="/index.js"></script>
   </body>
 </html>

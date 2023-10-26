@@ -1,0 +1,123 @@
+body {
+  font-size: 18px;
+  line-height: 1.8;
+  background-color: #f0f0eb;
+}
+
+main {
+  height: 100vh;
+  position: relative;
+
+  .topbar {
+    max-width: 996px;
+    margin: 0 auto;
+    font-family: sans-serif;
+
+    height: 60px;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      font-size: 1.5rem;
+      max-width: 996px;
+    }
+
+    .tools {
+
+    }
+  }
+
+  .message-container {
+    min-height: calc(100vh - 80px - 40px);
+
+    .message {
+      & .prompt,
+      .response,
+      .appended {
+        .content {
+          max-width: 996px;
+          margin: 0 auto;
+          padding: 1rem 2rem;
+        }
+      }
+
+      .prompt {
+        background-color: #fff;
+      }
+
+      .appended {
+        .content {
+          padding: 0;
+        }
+      }
+
+      &:last-child {
+        .appended {
+          .content {
+            height: 80px;
+          }
+        }
+      }
+
+      &.system-tip {
+        & textarea {
+          border: none;
+          outline: none;
+          border-radius: 0;
+          background-color: transparent;
+          width: 100%;
+          resize: none;
+
+          &:focus {
+            outline: none;
+            border: 2px solid black;
+            border-radius: 0.25rem;
+            padding: 0 0.25rem;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  .input-box {
+    height: 80px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #ccc;
+
+    .inner {
+      max-width: 996px;
+      margin: 0 auto;
+
+      display: grid;
+      grid-template-columns: 1fr auto;
+      border: 2px solid #333;
+      border-radius: 0.25rem;
+
+      & textarea,
+      button {
+        border: none;
+        outline: none;
+      }
+
+      & textarea {
+        padding: 0.25rem 0.5rem;
+        resize: none;
+      }
+
+      & button {
+        height: 100%;
+        padding: 0.25rem 1rem;
+        background-color: black;
+        color: white;
+        border-top-right-radius: 0.1rem;
+        border-bottom-right-radius: 0.1rem;
+      }
+    }
+  }
+}
