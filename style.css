@@ -46,30 +46,28 @@ main {
         }
       }
 
-      .prompt {
-        .content {
-          &::before {
-            content: '😀 ';
-            display: block;
-            font-size: 1.5rem;
+      &:not(.system-tip) {
+        .prompt {
+          .content {
+            &::before {
+              content: '😀 ';
+              display: block;
+              font-size: 1.5rem;
+            }
+          }
+        }
+  
+        .response {
+          .content {
+            &::before {
+              content: '🤖 ';
+              display: block;
+              font-size: 1.5rem;
+            }
           }
         }
       }
 
-      .response {
-        .content {
-          &::before {
-            content: '🤖 ';
-            display: block;
-            font-size: 1.5rem;
-          }
-          /* border: 1px solid #ccc; */
-          /* border-radius: 0.25rem; */
-        }
-        /* background-color: #eee; */
-        /* border-top: 1px solid #ccc; */
-        /* border-bottom: 1px solid #ccc; */
-      }
 
       .appended {
         .content {
