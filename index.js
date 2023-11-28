@@ -1,3 +1,5 @@
+import * as markdown from 'markdown-wasm-es';
+
 import { llama } from './completion';
 
 const state = {
@@ -12,6 +14,10 @@ function formatMessage(prompt, response = '', systemPrompt = '') {
   return `[INST]${systemPrompt_} ${prompt} [/INST]\n${response}`;
 }
 
+function formatVicunaMessage(prompt, response = '', systemPrompt = '') {
+  return [systemPrompt, `USER: ${prompt}`, `ASSISTANT: ${response}`].join('\n');
+}
+
 function formatHistory(history) {
   const messages = Object.values(history).sort((a, b) => Number(a.id) - Number(b.id));
   return messages.map(m => formatMessage(m.prompt, m.response)).join('\n');
@@ -21,7 +27,7 @@ async function send(prompt, { systemPrompt = '', config = {}, writer }) {
   state.systemPrompt = systemPrompt;
   state.config = config || {};
 
-  const finalPrompt = `${formatHistory(state.history)}${formatMessage(prompt, '', state.id === 0 ? systemPrompt : '')}`;
+  const finalPrompt = `${formatHistory(state.history)}${formatVicunaMessage(prompt, '', state.id === 0 ? systemPrompt : '')}`;
 
   const id = state.id++;
   state.history[id] = {
@@ -30,12 +36,12 @@ async function send(prompt, { systemPrompt = '', config = {}, writer }) {
     response: '',
   };
 
-  const request = llama(finalPrompt, { n_predict: 800, ...state.config });
+  const request = llama(finalPrompt, { n_predict: -1, ...state.config });
 
   let response = '';
   for await (const chunk of request) {
-    writer(chunk.data.content);
-    response += chunk.data.content;
+    writer(chunk.data.content || '');
+    response += chunk.data.content || '';
   }
 
   state.history[id].response = response;
@@ -86,11 +92,13 @@ function onSend() {
   const { responseContent, promptContent, appendedContent } = makeMessageContainers();
 
   const writer = text => {
-    responseContent.textContent += text;
+    responseContent._rawText += `${text || ''}`;
+    responseContent.innerHTML = markdown.parse(responseContent._rawText || '');
     appendedContent.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
-  promptContent.textContent = prompt_;
+  promptContent._rawText = prompt_;
+  promptContent.innerHTML = markdown.parse(promptContent._rawText || '');
   send(prompt_, { systemPrompt: systemPrompt_, writer, config: llmSettings_ });
 }
 
@@ -104,11 +112,13 @@ function exportHistory() {
   window.open(URL.createObjectURL(blob));
 }
 
-$('#send').addEventListener('click', onSend);
-$('#prompt').addEventListener('keydown', evt => {
-  if (evt.ctrlKey && evt.keyCode === 13) {
-    onSend();
-  }
-});
+markdown.init().then(() => {
+  $('#send').addEventListener('click', onSend);
+  $('#prompt').addEventListener('keydown', evt => {
+    if (evt.ctrlKey && evt.keyCode === 13) {
+      onSend();
+    }
+  });
 
-$('#export_history').addEventListener('click', exportHistory);
+  $('#export_history').addEventListener('click', exportHistory);
+});

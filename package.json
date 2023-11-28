@@ -42,5 +42,8 @@
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
     "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "markdown-wasm-es": "^1.2.1"
   }
 }

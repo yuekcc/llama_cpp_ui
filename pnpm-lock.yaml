@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  markdown-wasm-es:
+    specifier: ^1.2.1
+    version: 1.2.1
+
 devDependencies:
   eslint:
     specifier: ^8.48.0
@@ -938,6 +943,10 @@ packages:
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
+
+  /markdown-wasm-es@1.2.1:
+    resolution: {integrity: sha512-EHSbZYFU3XShlAgJ3UwsYmXiBWHNTWMSicOShCaK/7mfX+5SgUVnvLM94f5BIDLgevQMwmJs+LnBFjOwpE9aMw==}
+    dev: false
 
   /merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
