@@ -111,6 +111,7 @@ main {
     left: 0;
     right: 0;
     border-top: 1px solid #ccc;
+    background-color: #fff;
 
     .inner {
       max-width: 996px;

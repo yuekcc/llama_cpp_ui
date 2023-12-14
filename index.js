@@ -1,6 +1,7 @@
 import * as markdown from 'markdown-wasm-es';
 
 import { llama } from './completion';
+import { formatMessage } from './vicuna_prompt_template';
 
 const state = {
   id: 0,
@@ -8,15 +9,6 @@ const state = {
   config: {},
   history: {},
 };
-
-function formatMessage(prompt, response = '', systemPrompt = '') {
-  let systemPrompt_ = systemPrompt ? `\n<<SYS>>${systemPrompt}<</SYS>>\n` : '';
-  return `[INST]${systemPrompt_} ${prompt} [/INST]\n${response}`;
-}
-
-function formatVicunaMessage(prompt, response = '', systemPrompt = '') {
-  return [systemPrompt, `USER: ${prompt}`, `ASSISTANT: ${response}`].join('\n');
-}
 
 function formatHistory(history) {
   const messages = Object.values(history).sort((a, b) => Number(a.id) - Number(b.id));
@@ -27,7 +19,7 @@ async function send(prompt, { systemPrompt = '', config = {}, writer }) {
   state.systemPrompt = systemPrompt;
   state.config = config || {};
 
-  const finalPrompt = `${formatHistory(state.history)}${formatVicunaMessage(prompt, '', state.id === 0 ? systemPrompt : '')}`;
+  const finalPrompt = `${formatHistory(state.history)}${formatMessage(prompt, '', state.id === 0 ? systemPrompt : '')}`;
 
   const id = state.id++;
   state.history[id] = {
@@ -92,7 +84,12 @@ function onSend() {
   const { responseContent, promptContent, appendedContent } = makeMessageContainers();
 
   const writer = text => {
+    if(!responseContent._rawText) {
+      responseContent._rawText = '';
+    }
+
     responseContent._rawText += `${text || ''}`;
+    console.log(`responseContent._rawText`, responseContent._rawText);
     responseContent.innerHTML = markdown.parse(responseContent._rawText || '');
     appendedContent.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
