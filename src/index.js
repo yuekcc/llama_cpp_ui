@@ -1,7 +1,10 @@
-import * as markdown from 'markdown-wasm-es';
+import { marked } from 'marked';
 
 import { llama } from './completion';
 import { formatMessage } from './vicuna_prompt_template';
+
+import './reset.css';
+import './style.css';
 
 const state = {
   id: 0,
@@ -84,18 +87,17 @@ function onSend() {
   const { responseContent, promptContent, appendedContent } = makeMessageContainers();
 
   const writer = text => {
-    if(!responseContent._rawText) {
+    if (!responseContent._rawText) {
       responseContent._rawText = '';
     }
 
     responseContent._rawText += `${text || ''}`;
-    console.log(`responseContent._rawText`, responseContent._rawText);
-    responseContent.innerHTML = markdown.parse(responseContent._rawText || '');
+    responseContent.innerHTML = marked.parse(responseContent._rawText || '');
     appendedContent.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
   promptContent._rawText = prompt_;
-  promptContent.innerHTML = markdown.parse(promptContent._rawText || '');
+  promptContent.innerHTML = marked.parse(promptContent._rawText || '');
   send(prompt_, { systemPrompt: systemPrompt_, writer, config: llmSettings_ });
 }
 
@@ -109,7 +111,7 @@ function exportHistory() {
   window.open(URL.createObjectURL(blob));
 }
 
-markdown.init().then(() => {
+!(function () {
   $('#send').addEventListener('click', onSend);
   $('#prompt').addEventListener('keydown', evt => {
     if (evt.ctrlKey && evt.keyCode === 13) {
@@ -118,4 +120,4 @@ markdown.init().then(() => {
   });
 
   $('#export_history').addEventListener('click', exportHistory);
-});
+})();
